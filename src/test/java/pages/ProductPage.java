@@ -1,8 +1,8 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductPage extends BasePage {
@@ -10,7 +10,7 @@ public class ProductPage extends BasePage {
     // Page Elements
     private final By featureBulletsSelector = By.cssSelector("#feature-bullets");
 
-    public ProductPage(ChromeDriver driver) {
+    public ProductPage(WebDriver driver) {
         super(driver);
     }
 

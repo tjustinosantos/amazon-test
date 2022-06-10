@@ -7,20 +7,36 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.*;
 
 import java.util.logging.Logger;
 
 public class StepDefinition {
     static Logger log = Logger.getLogger(StepDefinition.class.getName());
-    ChromeDriver driver;
+    WebDriver driver;
     String originalWindow;
+    public static String remoteUrl = "http://localhost:4444/wd/hub";
+    protected static ThreadLocal<RemoteWebDriver> driverWeb = new ThreadLocal<>();
 
     @Before
-    public void startUp() {
-        driver = new ChromeDriver();
-    }
+    public void startUp() throws MalformedURLException {
+        if (System.getenv("DOCKER_RUN")!=null && System.getenv("DOCKER_RUN").equals("true")) {
+            System.out.println("GOT HERE");
+            ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--headless");
+            this.driver = new RemoteWebDriver(new URL(remoteUrl), chromeOptions);
+        } else {
+            this.driver = new ChromeDriver();
+        }    }
 
     @After
     public void tearDown() {
@@ -49,7 +65,7 @@ public class StepDefinition {
     @And("I click on click on {string}")
     public void I_click_on_click_on(String subMenuItem) throws Throwable {
         MainMenu mainMenu = new MainMenu(driver);
-        mainMenu.clickOnTvButton(subMenuItem);
+        mainMenu.clickOnSubMenu(subMenuItem);
     }
 
     @And("I filter the results by Brand {string}")
